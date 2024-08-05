@@ -1,0 +1,25 @@
+.navbar{
+    background-color: rgb(55, 8, 143);
+   
+}
+.nav-item{
+    padding-left: 35px;
+}
+.cart-desktop{
+    padding-right: 25px;
+}
+.form-control{
+    width: 350px;
+}
+
+.loginIcon{
+    height: 25px;
+    width: 25px;
+}
+.login{
+    display: flex;
+}
+
+.footer{
+    background-color: rgb(37, 9, 149);
+}
