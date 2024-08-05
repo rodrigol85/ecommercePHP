@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS ecommerce;
+USE ecommerce;
 -- Creazione della tabella degli indirizzi
 
 CREATE TABLE `addresses` (
