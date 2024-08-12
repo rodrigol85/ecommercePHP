@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -- Creazione della tabella degli admins
 CREATE TABLE `admins` (
   `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -11,6 +12,10 @@ CREATE TABLE `admins` (
 );
 
 
+=======
+CREATE DATABASE IF NOT EXISTS ecommerce;
+USE ecommerce;
+>>>>>>> 52a2a4d3637dfc3a48b01b225c169831513bff91
 -- Creazione della tabella degli indirizzi
 
 CREATE TABLE `addresses` (
