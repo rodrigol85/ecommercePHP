@@ -1,3 +1,16 @@
+-- Creazione della tabella degli admins
+CREATE TABLE `admins` (
+  `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `surname` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL UNIQUE,
+  `password` VARCHAR(255) NOT NULL,
+  `status` VARCHAR(50) NOT NULL,
+  `telefono` VARCHAR(20) NOT NULL,
+  `confirm_code` VARCHAR(255)
+);
+
+
 -- Creazione della tabella degli indirizzi
 
 CREATE TABLE `addresses` (

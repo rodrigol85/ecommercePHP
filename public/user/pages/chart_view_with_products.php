@@ -11,6 +11,10 @@ require_once ROOT . 'classes/Database.php';
 require_once ROOT . 'classes/Chart.php';
 require_once ROOT . 'classes/chart_items.php';
 require_once ROOT . 'classes/Product.php';
+require_once ROOT . 'inc/config.php';
+
+
+
 
 if (isset($_SESSION['user_id'])) {
     $id = $_SESSION['user_id'];
@@ -28,7 +32,7 @@ if (!empty($chart)) {
 $chart_items = $db->findChartItems($chart_id);
 $total = 0;
 
-
+$totalItemsInChart = $db->getTotalQuantity($chart_id);
 
 ?>
 
@@ -57,6 +61,12 @@ $total = 0;
                   exit;
                 }
 ?>
+        <div class="top-0 end-0">
+
+            <span class="input-group-text">
+                Elementi totale nel carello: <?php echo $totalItemsInChart ?>
+            </span>
+        </div>
         <table class="table table-striped table-bordered">
             <thead class="table-info">
                 <tr>
@@ -97,7 +107,7 @@ $total = 0;
                                 <img src="https://newlupetto.com/5462-amazon/sciarpa-stadium-giallo-rosso.jpg" style="width: 100px;" class="rounded float-end" alt="">
                             </th>
                             <th>
-                            <form action="http://localhost/ecommerce/public/user/pages/delete_item.php" method="post">
+                            <form action="./user/pages/delete_item.php" method="post">
                             <input type="hidden" name="item_id" value="<?php echo $item->getId_chart_item(); ?>">
                             <input type="hidden" name="chart_id" value="<?php echo $chart_id; ?>">
                            <input type="submit" name="delete" class="btn btn-danger" value="Cancella">
@@ -115,14 +125,14 @@ $total = 0;
 
             </tbody>
         </table>
-        <form method="post" action="http://localhost/ecommerce/public/user/pages/control_payment.php" class="inline-form">
+        <form method="post" action="./user/pages/control_payment.php" class="inline-form">
               <input type="hidden" name="chart_id" value="<?php echo $chart_id ?>">
               <input type="hidden" name="total" value="<?php echo $total; ?>">
               <button type="submit" class="btn btn-success <?php echo ($product->getQuantity() < 1) ? 'disabled' : ''; ?>">
                 Pagamento
               </button>
             </form>
-            <form method="post" action="http://localhost/ecommerce/public/user/pages/delete_chart.php" class="inline-form">
+            <form method="post" action="./user/pages/delete_chart.php" class="inline-form">
               <input type="hidden" name="chart_id" value="<?php echo $chart_id ?>">
               <input type="hidden" name="total" value="<?php echo $total; ?>">
               <button type="submit" class="btn btn-danger">
@@ -132,6 +142,8 @@ $total = 0;
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 
 </html>

@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 include 'controllo.php';
 
-?> 
+?>
 
 <?php
 define('ROOT', dirname(__FILE__) . '/../../../');
@@ -17,15 +17,20 @@ $timeout_duration = 600; // 10 minuti
 
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
 
-    // Se l'utente è inattivo per più di 10 minuti
-    session_unset();     // rimuove tutte le variabili di sessione
-    session_destroy();   // distrugge la sessione
-    session_start();
-    $_SESSION['errorMessage'] = "La sessione è scaduta, inserisca i suoi dati di nuovo";
-    header("Location: http://localhost/ecommerce/public/?page=login");
+  // Se l'utente è inattivo per più di 10 minuti
+  session_unset();     // rimuove tutte le variabili di sessione
+  session_destroy();   // distrugge la sessione
+  session_start();
+  $_SESSION['errorMessage'] = "La sessione è scaduta, inserisca i suoi dati di nuovo";
+  header("Location: http://localhost/ecommerce/public/?page=login");
 } else {
-    $_SESSION['last_activity'] = time(); // aggiorna l'ultimo tempo di attività
-    
+  $_SESSION['last_activity'] = time(); // aggiorna l'ultimo tempo di attività
+
+}
+$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
+
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
 }
 
 
@@ -56,42 +61,59 @@ $Next = $page + 1;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
   <title>Lista prodotti</title>
   <style>
     .cards-container {
       display: flex;
       flex-wrap: wrap;
       gap: .5rem;
-     
+
     }
 
     .card {
       flex: 1 1 calc(25% - .5rem);
     }
-    .fixed-size {
-  width: 200px;
-  height: 200px; 
-  object-fit: cover; 
-}
-.button-group {
-    display: flex;
-    justify-content: start; 
-}
 
+    .fixed-size {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: start;
+    }
   </style>
 </head>
 
 <body>
+
+<div class="toast-container position-fixed bottom-5 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="background-color: orange; color: white;">
+      <div class="toast-header" style="background-color: blue; color:white;">
+        <strong class="me-auto">Notifica</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Prodotto aggiunto al carrello!
+      </div>
+    </div>
+  </div>
+
+
   <div class="container">
     <h1>Lista Prodotti</h1>
-    <?php  
-        if(isset($_SESSION['errorMessage'])){
-            echo "<p style='background-color:green; color:white; border-radius:5px;' >" . $_SESSION['errorMessage'] . "</p>";
-            unset($_SESSION['errorMessage']);
-        }
-        
-        
-        ?>
+    <?php
+    if (isset($_SESSION['errorMessage'])) {
+      echo "<p style='background-color:green; color:white; border-radius:5px;' >" . $_SESSION['errorMessage'] . "</p>";
+      unset($_SESSION['errorMessage']);
+    }
+
+
+    ?>
 
 
     <?php echo generatePagination($page, $pages); ?>
@@ -109,14 +131,16 @@ $Next = $page + 1;
             <p class="card-text"><?php echo $product['price'] . " " . '&euro;';  ?></p>
             <p class="card-text"><?php echo substr($product['description'], 0, 20) . " " . "..."; ?></p>
             <div class="button-group">
-            <a href="./?page=product_detail&id=<?php echo $product['id']; ?>" class="card-link">Info... &ggg;</a>
-            <form method="post" action="http://localhost/ecommerce/public/user/pages/add_product.php">
-              <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-              <input type="hidden" name="unit_price" value="<?php echo $product['price']; ?>">
-              <button type="submit" class="btn btn-primary <?php echo ($product['quantity'] < 1) ? 'disabled' : ''; ?>">
-                <?php echo ($product['quantity'] < 1) ? 'Esaurito' : 'Aggiungi <i class="fas fa-shopping-cart"></i>'; ?>
-              </button>
-            </form>
+              <a href="./?page=product_detail&id=<?php echo $product['id']; ?>" class="card-link">Info... &ggg;</a>
+              <form method="post" action="user/pages/add_product.php" id="myForm">
+                <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                <input type="hidden" name="unit_price" value="<?php echo $product['price']; ?>">
+                <button type="submit" class="btn btn-primary <?php echo ($product['quantity'] < 1) ? 'disabled' : ''; ?>" onclick="aggiungiAlCarrello(event)">
+                  <?php echo ($product['quantity'] < 1) ? 'Esaurito' : 'Aggiungi <i class="fas fa-shopping-cart"></i>'; ?>
+                </button>
+                <div id="product-added-message" class="alert alert-success" style="display: none;">Prodotto aggiunto al carrello!</div>
+              </form>
+
             </div>
           </div>
         </div>
@@ -129,7 +153,38 @@ $Next = $page + 1;
 
   </div>
 
+  <script>
+function aggiungiAlCarrello(event) {
+  event.preventDefault();
+
+  const form = event.target.closest('form');
+
+  var toastEl = document.getElementById('liveToast');
+  var toast = new bootstrap.Toast(toastEl);
+
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      console.log('Prodotto aggiunto con successo');
+      toast.show();
+    } else {
+      console.error('Errore nell\'aggiunta del prodotto:', data.error || 'Errore generico');
+    }
+  })
+  .catch(error => {
+    console.error('Errore nella richiesta:', error);
+  });
+}
+
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
 </body>
 
 

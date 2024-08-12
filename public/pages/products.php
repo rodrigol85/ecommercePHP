@@ -1,12 +1,43 @@
-<?php
-define('ROOT', dirname(__FILE__) . '/../../');
 
-require_once ROOT . 'database/conexion.php';
+<?php
+if(isset($_GET['token'])) {
+    $token = $_GET['token'];
+
+    define('ROOT', dirname(__FILE__) . '/../../');
+    require_once ROOT . 'classes/Database.php';
+    require_once ROOT . 'classes/User.php';
+ 
+
+    $users = User::getAll();
+
+    $db = new Database('localhost', 'root', '', 'ecommerce');
+    $userFound = $db->findByToken($token);
+    if($userFound !== null){
+        $db->activeAccount($token);
+        $_SESSION['errorMessage'] = "Il tuo account è stato attivato";
+    }else{
+       
+        $_SESSION['errorMessage'] = "Si è verificato un errore";
+    }
+
+
+}
+?>
+
+<?php
+//define('ROOT', dirname(__FILE__) . '/../../');
+
+//require_once ROOT . 'database/conexion.php';
 
 include 'pagination.php';
 
 
+$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
 
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+   
 
 
 
@@ -63,6 +94,14 @@ $Next = $page + 1;
 </head>
 
 <body>
+    <div>
+    <?php  
+        if(isset($_SESSION['errorMessage'])){
+            echo "<p style='background-color:yellow; color:green; border-radius:5px;' >" . $_SESSION['errorMessage'] . "</p>";
+            unset($_SESSION['errorMessage']);
+        }
+        ?>
+    </div>
   <div class="container">
     <h1>Lista Prodotti</h1>
 
@@ -83,7 +122,7 @@ $Next = $page + 1;
             <p class="card-text"><?php echo substr($product['description'], 0, 20) . " " . "..."; ?></p>
             <div class="button-group">
             <a href="./?page=product_detail&id=<?php echo $product['id']; ?>" class="card-link">Info... &ggg;</a>
-            <form method="post" action="http://localhost/ecommerce/public/user/pages/add_product.php">
+            <form method="post" action="./user/pages/add_product.php">
               <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
               <input type="hidden" name="unit_price" value="<?php echo $product['price']; ?>">
               <button type="submit" class="btn btn-primary <?php echo ($product['quantity'] < 1) ? 'disabled' : ''; ?>">

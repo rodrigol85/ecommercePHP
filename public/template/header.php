@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 ?>
 
 
@@ -41,11 +40,6 @@ session_start();
             echo '<li class="nav-item">
               <a class="nav-link" href="' . ROOT_URL . 'public?page=about">Chi siamo</a>
           </li>';
-          } elseif ($_SESSION['role'] === "admin") {
-
-            echo '<li class="nav-item">
-              <a class="nav-link" href="' . ROOT_URL . 'public?page=abandoned_charts">Carrelli abbandonati</a>
-          </li>';
           }
           ?>
 
@@ -61,39 +55,35 @@ session_start();
             echo '<li class="nav-item">
               <a class="nav-link" href="' . ROOT_URL . 'public?page=products">Prodotti</a>
           </li>';
-          } elseif ($_SESSION['role'] === "admin") {
-            // Utente loggato come admin
-            echo '<li class="nav-item">
-              <a class="nav-link" href="' . ROOT_URL . 'public?page=orders">Ordini Pendenti</a>
-          </li>';
           }
-           ?>
-              <?php
+          ?>
+          <?php
           // Controlla se l'utente è loggato e il suo ruolo
-        //   if (!isset($_SESSION['role'])) {
-        //  echo ' <li class="nav-item">
-        //   <form action="http://localhost/ecommerce/public/user/pages/?page=search_product" method="GET" class="d-flex" role="search">
-        //       <input class="form-control me-2" name="search" type="search" placeholder="Cerca prodotto" aria-label="Search">
-        //       <button class="btn btn-outline-success" type="submit">Search</button>
-        //     </form>
-        //   </li>';
-        //   }elseif($_SESSION['role'] === "user") {
-           
-        //         echo ' <li class="nav-item">
-        //       <form action="http://localhost/ecommerce/public/?page=search_product" method="POST" class="d-flex" role="search">
-        //           <input type="text" id="search-input" class="form-control me-2" name="search" placeholder="Cerca prodotti" aria-label="Search">
-        //           <button class="btn btn-outline-success" type="submit">Cerca</button>
-        //       </form>
-        //   </li>
-        //   ';
-        //    } elseif ($_SESSION['role'] === "admin") {
-        //     echo ' <li class="nav-item">
-        //   <form action="http://localhost/ecommerce/public/user/pages/?page=search_product" method="GET" class="d-flex" role="search">
-        //       <input class="form-control me-2" name="search" type="search" placeholder="Cerca utente" aria-label="Search">
-        //       <button class="btn btn-outline-success" type="submit">Search</button>
-        //     </form>
-        //   </li>';
-        //    } ?>
+          //   if (!isset($_SESSION['role'])) {
+          //  echo ' <li class="nav-item">
+          //   <form action="http://localhost/ecommerce/public/user/pages/?page=search_product" method="GET" class="d-flex" role="search">
+          //       <input class="form-control me-2" name="search" type="search" placeholder="Cerca prodotto" aria-label="Search">
+          //       <button class="btn btn-outline-success" type="submit">Search</button>
+          //     </form>
+          //   </li>';
+          //   }elseif($_SESSION['role'] === "user") {
+
+          //         echo ' <li class="nav-item">
+          //       <form action="http://localhost/ecommerce/public/?page=search_product" method="POST" class="d-flex" role="search">
+          //           <input type="text" id="search-input" class="form-control me-2" name="search" placeholder="Cerca prodotti" aria-label="Search">
+          //           <button class="btn btn-outline-success" type="submit">Cerca</button>
+          //       </form>
+          //   </li>
+          //   ';
+          //    } elseif ($_SESSION['role'] === "admin") {
+          //     echo ' <li class="nav-item">
+          //   <form action="http://localhost/ecommerce/public/user/pages/?page=search_product" method="GET" class="d-flex" role="search">
+          //       <input class="form-control me-2" name="search" type="search" placeholder="Cerca utente" aria-label="Search">
+          //       <button class="btn btn-outline-success" type="submit">Search</button>
+          //     </form>
+          //   </li>';
+          //    } 
+          ?>
         </ul>
 
 
@@ -104,7 +94,10 @@ session_start();
             <li class="nav-item">
               <a class="nav-link" href="<?php echo ROOT_URL; ?>public?page=chart_view_empty">
                 <i class="fas fa-shopping-cart"></i>
-                <span class="badge badge-primary badge-pill js-totCartItems"></span>
+                <span class="badge badge-primary badge-pill js-totCartItems" id="totCartItems">
+              
+                </span>
+
               </a>
             </li>
           </ul>
@@ -118,26 +111,6 @@ session_start();
             </li>
           <?php } ?>
 
-          <?php if (isset($_SESSION['stato']) && $_SESSION['stato'] === "loggato" && $_SESSION['role'] === "admin") { ?>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Amministratore
-              </a>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>public?page=category">Creare nuova categoria</a></li>
-                <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>public?page=product_insert">Inserire nuovo prodotto</a></li>
-                <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>public?page=lista_prodotti">Lista di Prodotti</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>public?page=users_list">Utenti</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>public?page=all_orders">Lista di tutti gli ordini</a></li>
-              </ul>
-            </li>
-          <?php } ?>
 
           <?php if (isset($_SESSION['stato']) && $_SESSION['stato'] === "loggato" && $_SESSION['role'] === "user") { ?>
             <li class="nav-item dropdown">
@@ -146,6 +119,7 @@ session_start();
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>public?page=profile">Profilo</a></li>
+                <li><a class="dropdown-item" href="<?php echo ROOT_URL; ?>public?page=order_user">Ordini Precedenti</a></li>
 
               </ul>
             </li>
@@ -170,13 +144,13 @@ session_start();
 
   <script>
     document.getElementById('search-form').addEventListener('submit', function(event) {
-        // Prevenire il comportamento di default del form
-        event.preventDefault();
+      // Prevenire il comportamento di default del form
+      event.preventDefault();
 
-        // Ottenere il valore dell'input
-        const searchTerm = document.getElementById('search-input').value;
+      // Ottenere il valore dell'input
+      const searchTerm = document.getElementById('search-input').value;
 
-        // Inviare una richiesta AJAX o reindirizzare a un'altra pagina
-        // ...
+      // Inviare una richiesta AJAX o reindirizzare a un'altra pagina
+      // ...
     });
-</script>
+  </script>

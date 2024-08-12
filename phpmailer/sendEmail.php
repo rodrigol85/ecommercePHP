@@ -22,11 +22,11 @@ function inviaEmail($destinatario, $subject, $body, $link) {
         $mail->Port = 587;
         $mail->SMTPSecure = 'tls';
         $mail->SMTPAuth = true;
-        $mail->Username = 'aktproject2024@outlook.it';
-        $mail->Password = 'Nonsiamoiprimineanchegliultimi';
+        $mail->Username = 'phpprova@outlook.it';
+        $mail->Password = 'Provaperphp1';
 
         // Imposta mittente e destinatario
-        $mail->setFrom('aktproject2024@outlook.it', 'Ecommerce');
+        $mail->setFrom('phpprova@outlook.it', 'Ecommerce');
         $mail->addAddress($destinatario);
 
         $mail->isHTML(true);

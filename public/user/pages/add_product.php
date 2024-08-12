@@ -6,7 +6,7 @@ session_start();
 
 if (!isset($_SESSION['user_id']) || !isset($_POST['product_id'])) {
   session_start();
-  $_SESSION['errorMessage'] = "Prima deve loggarsi ";
+  $_SESSION['errorMessage'] = "Prima deve loggarsi ";  
   header("Location: http://localhost/ecommerce/public/?page=login ");
     die();
 }
@@ -71,5 +71,6 @@ if (!$row) {
 }
 
 //con questo codice rimane nella stessa pagina dove aggiunge al carrello
-header('Location: ' . $_SERVER['HTTP_REFERER']);
+header('Content-Type: application/json');
+echo json_encode(['success' => true]);
 exit;

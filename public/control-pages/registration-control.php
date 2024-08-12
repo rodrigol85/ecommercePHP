@@ -6,6 +6,7 @@
 define('ROOT', dirname(__FILE__) . '/../../');
 require_once ROOT . 'database/conexion.php';
 require_once ROOT . 'phpmailer/sendEmail.php';
+require_once ROOT . 'inc/config.php';
 
 
 
@@ -30,7 +31,7 @@ $result = mysqli_query($conn, $query);
 if (mysqli_num_rows($result) > 0) {
     session_start();
     $_SESSION['emailPresente'] = "Questa email è già presente nel database";
-    header("Location: http://localhost/ecommerce/public/?page=registration ");
+    header("Location: ". ROOT_URL . "public/?page=registration ");
     die;
 
 }
@@ -76,7 +77,7 @@ if ($addressInsertResult) {
             inviaEmail($email, $subject, $emailBody, $link);
         session_start();
         $_SESSION['registracionSuccess'] = "La registrazione è stato un successo, un link per attivare l'account arriverà via email, potrebbe arrivare alla cartella SPAM";
-        header("Location: http://localhost/ecommerce/public/?page=registration ");
+        header("Location: ". ROOT_URL . "public/?page=registration ");
     } else {
         // Se c'è un errore all'inserire nella tabella user
         mysqli_rollback($conn); // Rollback se c'è un errore in questa parte del codice
@@ -87,3 +88,6 @@ if ($addressInsertResult) {
     mysqli_rollback($conn); // Rollback se c'è un errore in questa parte del codice
     echo "Error inserting address data: " . mysqli_error($conn);
 }
+
+
+?>

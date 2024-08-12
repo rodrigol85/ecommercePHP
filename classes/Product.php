@@ -99,14 +99,16 @@ class Product
         $stmt = $conn->prepare("DELETE FROM products WHERE id = :id");
         try {
             $stmt->execute([':id' => $id]);
-          
+            return true; 
         } catch (PDOException $e) {
             echo "Errore durante l'esecuzione della query: " . $e->getMessage();
+            return false; 
+        } finally {
+            $stmt = null;
+            $conn = null;
         }
-        $stmt = null;
-        $conn = null;
-
     }
+    
 
 
    

@@ -39,7 +39,7 @@ if ($stmt->execute()) {
                 }elseif($userRole == 'user' && $userStatus !== 'activated'){
                   session_start();
                   $_SESSION['errorMessage'] = "Il suo account non è ancora attivato, controlla la sua email per attivare";
-                  header("Location: http://localhost/ecommerce/public/?page=login ");
+                  header("Location: ". ROOT_URL . "public/?page=login ");
 
                 }else{
                   session_start();
@@ -51,7 +51,8 @@ if ($stmt->execute()) {
                   $_SESSION['email'] = $userEmail;
                   $_SESSION['user_id'] = $user_id;
                  
-                  header("Location: ../user/pages/?page=user");
+                  header("Location: ". ROOT_URL . "public/?page=products ");
+               
 
                   
                 }
@@ -60,14 +61,14 @@ if ($stmt->execute()) {
               } else {
                   session_start();
                   $_SESSION['errorMessage'] = "Password o username incorretti";
-                  header("Location: http://localhost/ecommerce/public/?page=login ");
+                  header("Location: ". ROOT_URL . "public/?page=login ");
 
               }
        }
     } else {
       session_start();
       $_SESSION['errorMessage'] = "Non esiste nessun utente con questa email";
-      header("Location: http://localhost/ecommerce/public/?page=login ");
+      header("Location: ". ROOT_URL . "public/?page=login ");
     }
 } else {
     echo "Errore: " . $stmt->errorInfo()[2];

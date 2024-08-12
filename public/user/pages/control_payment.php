@@ -9,13 +9,15 @@ require_once ROOT . 'classes/Chart.php';
 require_once ROOT . 'classes/chart_items.php';
 require_once ROOT . 'classes/Product.php';
 require_once ROOT . 'classes/Database.php';
+require_once ROOT . 'inc/config.php';
 
 session_start();
 
 if (!isset($_SESSION['user_id']) || !isset($_POST['chart_id'])) {
   session_start();
   $_SESSION['errorMessage'] = "Prima deve loggarsi ";
-  header("Location: http://localhost/ecommerce/public/?page=login ");
+  header("Location: ". ROOT_URL . "user/public/?page=login");
+ 
     die();
 }
 
@@ -121,11 +123,13 @@ $emailBody .= '<th colspan="4" class="table-info">Totale</th>
                             inviaEmail($email, $subject, $emailBody, $link);
                             session_start();
                             $_SESSION['errorMessage'] = "Il pagamento è avvenuto con successo, contralla la sua email";
-                            header("Location: http://localhost/ecommerce/public/?page=products");
+                            
+                            header("Location: ". ROOT_URL . "public/?page=products");
                         } else {
                             session_start();
                             $_SESSION['errorMessage'] = "Si è verificato un errore";
-                            header("Location: http://localhost/ecommerce/public/?page=login ");
+                            //header("Location: http://localhost/ecommerce/public/?page=login ");
+                            header("Location: ". ROOT_URL . "user/public/?page=login");
                               die();
                         }
                     } else {
