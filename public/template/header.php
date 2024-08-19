@@ -57,33 +57,7 @@ session_start();
           </li>';
           }
           ?>
-          <?php
-          // Controlla se l'utente è loggato e il suo ruolo
-          //   if (!isset($_SESSION['role'])) {
-          //  echo ' <li class="nav-item">
-          //   <form action="http://localhost/ecommerce/public/user/pages/?page=search_product" method="GET" class="d-flex" role="search">
-          //       <input class="form-control me-2" name="search" type="search" placeholder="Cerca prodotto" aria-label="Search">
-          //       <button class="btn btn-outline-success" type="submit">Search</button>
-          //     </form>
-          //   </li>';
-          //   }elseif($_SESSION['role'] === "user") {
-
-          //         echo ' <li class="nav-item">
-          //       <form action="http://localhost/ecommerce/public/?page=search_product" method="POST" class="d-flex" role="search">
-          //           <input type="text" id="search-input" class="form-control me-2" name="search" placeholder="Cerca prodotti" aria-label="Search">
-          //           <button class="btn btn-outline-success" type="submit">Cerca</button>
-          //       </form>
-          //   </li>
-          //   ';
-          //    } elseif ($_SESSION['role'] === "admin") {
-          //     echo ' <li class="nav-item">
-          //   <form action="http://localhost/ecommerce/public/user/pages/?page=search_product" method="GET" class="d-flex" role="search">
-          //       <input class="form-control me-2" name="search" type="search" placeholder="Cerca utente" aria-label="Search">
-          //       <button class="btn btn-outline-success" type="submit">Search</button>
-          //     </form>
-          //   </li>';
-          //    } 
-          ?>
+       
         </ul>
 
 

@@ -91,7 +91,7 @@ $Next = $page + 1;
 
 <body>
 
-<div class="toast-container position-fixed bottom-5 end-0 p-3">
+  <div class="toast-container position-fixed bottom-5 end-0 p-3">
     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style="background-color: orange; color: white;">
       <div class="toast-header" style="background-color: blue; color:white;">
         <strong class="me-auto">Notifica</strong>
@@ -106,6 +106,13 @@ $Next = $page + 1;
 
   <div class="container">
     <h1>Lista Prodotti</h1>
+    <div style="padding-bottom: 3px;">
+
+      <form action="?page=search_product" method="POST" class="d-flex ms-auto" role="search">
+        <input type="text"  class="form-control me-2" name="search" placeholder="Cerca prodotti" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Cerca</button>
+      </form>
+    </div>
     <?php
     if (isset($_SESSION['errorMessage'])) {
       echo "<p style='background-color:green; color:white; border-radius:5px;' >" . $_SESSION['errorMessage'] . "</p>";
@@ -154,33 +161,33 @@ $Next = $page + 1;
   </div>
 
   <script>
-function aggiungiAlCarrello(event) {
-  event.preventDefault();
+    function aggiungiAlCarrello(event) {
+      event.preventDefault();
 
-  const form = event.target.closest('form');
+      const form = event.target.closest('form');
 
-  var toastEl = document.getElementById('liveToast');
-  var toast = new bootstrap.Toast(toastEl);
+      var toastEl = document.getElementById('liveToast');
+      var toast = new bootstrap.Toast(toastEl);
 
-  fetch(form.action, {
-    method: 'POST',
-    body: new FormData(form)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.success) {
-      console.log('Prodotto aggiunto con successo');
-      toast.show();
-    } else {
-      console.error('Errore nell\'aggiunta del prodotto:', data.error || 'Errore generico');
+      fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form)
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('Prodotto aggiunto con successo');
+            toast.show();
+          } else {
+            console.error('Errore nell\'aggiunta del prodotto:', data.error || 'Errore generico');
+          }
+        })
+        .catch(error => {
+          console.error('Errore nella richiesta:', error);
+        });
     }
-  })
-  .catch(error => {
-    console.error('Errore nella richiesta:', error);
-  });
-}
-
   </script>
+  
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
